@@ -69,6 +69,7 @@
     <div class="flex items-center">
       <button
         class="bg-transparent px-8 py-3 mx-2 rounded-md border border-gray-700 hover:bg-gray-200"
+        @click="onBack"
       >
         Back
       </button>
@@ -84,7 +85,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref, computed, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "@/store";
 
@@ -96,11 +97,16 @@ export default defineComponent({
     const countries = store.state.countries;
     const currencies = store.state.currencies;
     const packages = store.state.packages;
+    const user = store.state.user;
 
-    const name = ref("");
-    const age = ref(0);
-    const country = ref("");
-    const packageType = ref("");
+    const name = ref(user.name);
+    const age = ref(user.age);
+    const country = ref(user.country);
+    const packageType = ref(user.packageType);
+
+    const onBack = () => {
+      router.push({ name: "home" });
+    };
 
     const onNext = () => {
       if (name.value && age.value && country.value && packageType.value) {
@@ -137,6 +143,10 @@ export default defineComponent({
       return 0;
     });
 
+    watch(age, (val) => {
+      if (val < 0 || val > 100) router.push({ name: "error" });
+    });
+
     return {
       name,
       age,
@@ -150,6 +160,7 @@ export default defineComponent({
       countries,
       currencies,
       packages,
+      onBack,
       onNext,
     };
   },
