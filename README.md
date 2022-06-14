@@ -1,4 +1,4 @@
-# test-ex
+# Vue simple wizard
 
 ## Project setup
 ```
